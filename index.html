@@ -20,6 +20,19 @@
       var knap = document.getElementById("valg");
       var confetti = new JSConfetti();
 
+
+      function valgtema()
+      {
+
+        if(globalTick.value % 1000 === 666)
+          return ["👿", "😈", "🤘"];
+
+        if(globalTick.value % 1000 === 420)
+          return ["🌿", "🥦", "🌳", "🍁", "🍃", "🍀", "🪴", "🔥"];
+
+        return ["🗳️", "🗳️", "🗳️", "🦠", "😷", "🪖", "🇺🇦", "⛽", "🙈", "🙉", "🙊", "🌍", "🌊", "🔥"];
+      }
+
       function setupFlip(tick) {
         globalTick = tick;
         fetch('/count').then(r => r.json()).then(j => tick.value = j["count"]);
@@ -30,10 +43,8 @@
         knap.removeEventListener("click", udskrivValget);
 
         confetti.addConfetti({
-          emojis: [
-            "🗳️", "🗳️", "🗳️", "🦠", "😷", "🪖", "🇺🇦", "⛽", "🙈", "🙉", "🙊", "🌍", "🌊", "🔥",
-          ],
-        });      
+          emojis: valgtema()
+        });
 
         setTimeout(function() {
             UdskrivValgServiceType_UdskrivValg();
