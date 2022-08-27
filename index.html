@@ -19,16 +19,30 @@
     <script>
       var knap = document.getElementById("valg");
       var confetti = new JSConfetti();
+      var dato = new Date();
 
+      function overSpæregrænsen(værdi, fuzz)
+      {
+        var grænse = globalTick.value % Math.pow(10, værdi.toString().length);
+        return værdi >= grænse - fuzz && værdi <= grænse + fuzz;
+      }
 
       function valgtema()
       {
-
-        if(globalTick.value % 1000 === 666)
+        if(overSpæregrænsen(666, 1))
           return ["👿", "😈", "🤘"];
 
-        if(globalTick.value % 1000 === 420)
+        if(overSpæregrænsen(420, 1))
           return ["🌿", "🥦", "🌳", "🍁", "🍃", "🍀", "🪴", "🔥"];
+
+        if(dato.getMonth() == 11)
+          return ["🎅", "🤶", "🧑‍🎄", "❄️", "☃️", "🎁", "🎄", "🦌"];
+
+        if(dato.getMonth() == 1 && dato.getDay() == 14)
+          return ["💖", "❤️", "🥰", "😘", "😍"];
+
+        if(dato.getMonth() == 9 && dato.getDay() == 31)
+          return ["👻", "🎃", "🦇"];
 
         return ["🗳️", "🗳️", "🗳️", "🦠", "😷", "🪖", "🇺🇦", "⛽", "🙈", "🙉", "🙊", "🌍", "🌊", "🔥"];
       }
