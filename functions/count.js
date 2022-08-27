@@ -10,16 +10,21 @@ export async function onRequest(context) {
   } = context;
 
   var value = parseInt(await env.VALGKNAPPEN.get("count"));
+  var limited = false;
 
-  if(isNaN(value))
-    value = 0;
+  if (isNaN(value)) value = 0;
 
   if (request.method.toUpperCase() === "POST") {
     value++;
-    await env.VALGKNAPPEN.put("count", value.toString());
+    try {
+      await env.VALGKNAPPEN.put("count", value.toString());
+    } catch {
+      value--;
+      limited = true;
+    }
   }
 
-  return new Response(JSON.stringify({ count: value }, null, 2), {
+  return new Response(JSON.stringify({ count: value, limited: limited }, null, 2), {
     headers: {
       "content-type": "application/json",
     },

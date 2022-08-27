@@ -2,18 +2,20 @@
   <head>
     <meta charset="UTF-8" />
     <script src="dk.api.stm.valg.UdskrivValgService.binding.min.js"></script>
-    <link href="dk.api.stm.valg.UdskrivValgService.binding.min.css" rel="stylesheet">
+    <link
+      href="dk.api.stm.valg.UdskrivValgService.binding.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="regeringOverMidten">
-
       <div class="tick" data-value="" data-did-init="setupFlip">
         <div data-repeat="true" aria-hidden="true">
           <span data-view="flip"></span>
         </div>
       </div>
 
-      <button id="valg"><span>Valg!</span></button>
+      <button id="valg"><span id="tekst">Valg!</span></button>
     </div>
 
     <script>
@@ -21,27 +23,26 @@
       var confetti = new JSConfetti();
       var dato = new Date();
 
-      function overSpæregrænsen(værdi, fuzz)
-      {
+      limited = false;
+
+      function overSpæregrænsen(værdi, fuzz) {
         var grænse = globalTick.value % Math.pow(10, værdi.toString().length);
         return værdi >= grænse - fuzz && værdi <= grænse + fuzz;
       }
 
-      function valgtema()
-      {
-        if(overSpæregrænsen(666, 1))
-          return ["👿", "😈", "🤘"];
+      function valgtema() {
+        if (overSpæregrænsen(666, 1)) return ["👿", "😈", "🤘"];
 
-        if(overSpæregrænsen(420, 1))
+        if (overSpæregrænsen(420, 1))
           return ["🌿", "🥦", "🌳", "🍁", "🍃", "🍀", "🪴", "🔥"];
 
-        if(dato.getMonth() == 11)
+        if (dato.getMonth() == 11)
           return ["🎅", "🤶", "🧑‍🎄", "❄️", "☃️", "🎁", "🎄", "🦌"];
 
-        if(dato.getMonth() == 1 && dato.getDay() == 14)
+        if (dato.getMonth() == 1 && dato.getDay() == 14)
           return ["💖", "❤️", "🥰", "😘", "😍"];
 
-        if(dato.getMonth() == 9 && dato.getDay() == 31)
+        if (dato.getMonth() == 9 && dato.getDay() == 31)
           return ["👻", "🎃", "🦇"];
 
         return ["🗳️", "🗳️", "🗳️", "🦠", "😷", "🪖", "🇺🇦", "⛽", "🙈", "🙉", "🙊", "🌍", "🌊", "🔥"];
@@ -49,22 +50,30 @@
 
       function setupFlip(tick) {
         globalTick = tick;
-        fetch('/count').then(r => r.json()).then(j => tick.value = j["count"]);
+        fetch("/count")
+          .then((r) => r.json())
+          .then((j) => (tick.value = j["count"]));
       }
 
       function udskrivValget() {
         knap.classList.add("pressed");
         knap.removeEventListener("click", udskrivValget);
 
-        confetti.addConfetti({
-          emojis: valgtema()
-        });
+        if (!limited) {
+          UdskrivValgServiceType_UdskrivValg();
 
-        setTimeout(function() {
-            UdskrivValgServiceType_UdskrivValg();
+          confetti.addConfetti({
+            emojis: valgtema(),
+          });
+
+          setTimeout(function () {
             knap.classList.remove("pressed");
             knap.addEventListener("click", udskrivValget);
-        }, 1500);
+          }, 1500);
+        }else{
+          document.getElementById("tekst").style.fontSize = "50%";
+          document.querySelector("#tekst").textContent = "Der kommer en rigtig god løsning i morgen";
+        }
       }
 
       knap.addEventListener("click", udskrivValget);
