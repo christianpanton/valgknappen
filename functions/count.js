@@ -19,7 +19,6 @@ export async function onRequest(context) {
     try {
       await env.VALGKNAPPEN.put("count", value.toString());
     } catch {
-      value--;
       limited = true;
     }
   }

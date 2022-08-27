@@ -55,6 +55,11 @@
           .then((j) => (tick.value = j["count"]));
       }
 
+      function udskydValget(){
+        document.getElementById("tekst").style.fontSize = "50%";
+        document.querySelector("#tekst").textContent = "Der kommer en rigtig god løsning i morgen";
+      }
+
       function udskrivValget() {
         knap.classList.add("pressed");
         knap.removeEventListener("click", udskrivValget);
@@ -69,10 +74,14 @@
           setTimeout(function () {
             knap.classList.remove("pressed");
             knap.addEventListener("click", udskrivValget);
+
+            if(limited){
+              udskydValget();
+              globalTick.value--;
+            }
           }, 1500);
         }else{
-          document.getElementById("tekst").style.fontSize = "50%";
-          document.querySelector("#tekst").textContent = "Der kommer en rigtig god løsning i morgen";
+          udskydValget();
         }
       }
 
